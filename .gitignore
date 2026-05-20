@@ -10,3 +10,24 @@ Desktop.ini
 *.temp
 *.bak
 *.swp
+
+# Логи
+*.log
+
+# SQL дампы и временные БД
+*.sqlite
+*.db
+
+# Файлы IDE
+.vscode/
+.idea/
+
+# Кэш
+.cache/
+
+# Office временные файлы
+~$*
+
+# Архивы
+*.zip
+*.rar
