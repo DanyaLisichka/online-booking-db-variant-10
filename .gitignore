@@ -1,0 +1,12 @@
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Временные файлы
+*.tmp
+*.temp
+*.bak
+*.swp
