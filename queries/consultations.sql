@@ -1,4 +1,4 @@
-use psychology_center
+-- Вывод информации о консультациях
 
 SELECT
     c.full_name,

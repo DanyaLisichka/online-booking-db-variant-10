@@ -1,3 +1,4 @@
+-- Поиск клиентов, посещавших психологов чаще среднего:
 SELECT DISTINCT c.full_name
 FROM clients c
 JOIN appointments a
