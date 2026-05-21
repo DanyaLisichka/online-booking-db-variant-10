@@ -1,5 +1,3 @@
-use psychology_center
-
 SELECT
     p.full_name,
     COUNT(a.appointment_id) AS total_appointments
