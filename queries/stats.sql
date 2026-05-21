@@ -1,5 +1,3 @@
-use psychology_center
-
 SELECT DISTINCT c.full_name
 FROM clients c
 JOIN appointments a
