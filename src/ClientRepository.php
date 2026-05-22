@@ -50,16 +50,12 @@ class ClientRepository extends AbstractRepository
             ':full_name' => $data['full_name'],
             ':email' => $data['email'],
             ':phone' => $data['phone'],
-            ':registration_date' =>
-                $data['registration_date']
+            ':registration_date' => $data['registration_date']
         ]);
     }
 
-    public function update(
-        int $id,
-        array $data
-    ) {
-
+    public function update(int $id, array $data)
+    {
         $sql = "
             UPDATE clients
             SET
@@ -77,8 +73,7 @@ class ClientRepository extends AbstractRepository
             ':full_name' => $data['full_name'],
             ':email' => $data['email'],
             ':phone' => $data['phone'],
-            ':registration_date' =>
-                $data['registration_date']
+            ':registration_date' => $data['registration_date']
         ]);
     }
 
@@ -95,4 +90,121 @@ class ClientRepository extends AbstractRepository
             ':id' => $id
         ]);
     }
+
+    public function findPaginated(
+    string $search,
+    int $limit,
+    int $offset,
+    string $sort = 'client_id',
+    string $order = 'desc'
+) {
+    $allowedSortFields = [
+        'client_id',
+        'full_name',
+        'email',
+        'phone',
+        'registration_date'
+    ];
+
+    if (!in_array($sort, $allowedSortFields)) {
+        $sort = 'client_id';
+    }
+
+    $order = strtolower($order);
+
+    if (!in_array($order, ['asc', 'desc'])) {
+        $order = 'desc';
+    }
+
+    $sql = "
+        SELECT *
+        FROM clients
+        WHERE
+            full_name LIKE :search
+            OR email LIKE :search
+            OR phone LIKE :search
+        ORDER BY $sort $order
+        LIMIT :limit
+        OFFSET :offset
+    ";
+
+    $stmt = $this->pdo->prepare($sql);
+
+    $stmt->bindValue(
+        ':search',
+        "%{$search}%",
+        PDO::PARAM_STR
+    );
+
+    $stmt->bindValue(
+        ':limit',
+        $limit,
+        PDO::PARAM_INT
+    );
+
+    $stmt->bindValue(
+        ':offset',
+        $offset,
+        PDO::PARAM_INT
+    );
+
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+    public function countAll(string $search)
+    {
+        $sql = "
+            SELECT COUNT(*)
+            FROM clients
+            WHERE
+                full_name LIKE :search
+                OR email LIKE :search
+                OR phone LIKE :search
+        ";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute([
+            ':search' => "%{$search}%"
+        ]);
+
+        return (int) $stmt->fetchColumn();
+    }
+
+
+public function hasAppointments(int $id): bool
+{
+    $sql = "
+        SELECT COUNT(*)
+        FROM appointments
+        WHERE client_id = :id
+    ";
+
+    $stmt = $this->pdo->prepare($sql);
+
+    $stmt->execute([
+        ':id' => $id
+    ]);
+
+    return (int) $stmt->fetchColumn() > 0;
+}
+
+public function hasRequests(int $id): bool
+{
+    $sql = "
+        SELECT COUNT(*)
+        FROM requests
+        WHERE client_id = :id
+    ";
+
+    $stmt = $this->pdo->prepare($sql);
+
+    $stmt->execute([
+        ':id' => $id
+    ]);
+
+    return (int) $stmt->fetchColumn() > 0;
+}
 }

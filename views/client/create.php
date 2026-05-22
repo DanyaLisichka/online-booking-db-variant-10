@@ -4,6 +4,12 @@
 
 <form method="POST">
 
+<input
+    type="hidden"
+    name="csrf_token"
+    value="<?= htmlspecialchars(generateCsrfToken()) ?>"
+>
+
     <!-- FULL NAME -->
 
     <div class="mb-3">

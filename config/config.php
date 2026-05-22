@@ -1,6 +1,6 @@
 <?php
 
-define('DB_HOST', 'Danyas-Mac-mini.local');
+define('DB_HOST', '127.0.0.1');
 define('DB_NAME', 'psychology_center');
 define('DB_USER', 'root');
 define('DB_PASS', '228228228');
